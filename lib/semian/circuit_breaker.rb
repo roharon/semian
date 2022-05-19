@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module Semian
-  class CircuitBreaker #:nodoc:
+  class CircuitBreaker # :nodoc:
     extend Forwardable
 
     def_delegators :@state, :closed?, :open?, :half_open?
@@ -7,7 +9,7 @@ module Semian
     attr_reader :name, :half_open_resource_timeout, :error_timeout, :state, :last_error
 
     def initialize(name, exceptions:, success_threshold:, error_threshold:,
-                         error_timeout:, implementation:, half_open_resource_timeout: nil, error_threshold_timeout: nil)
+      error_timeout:, implementation:, half_open_resource_timeout: nil, error_threshold_timeout: nil)
       @name = name.to_sym
       @success_count_threshold = success_threshold
       @error_count_threshold = error_threshold
@@ -25,6 +27,7 @@ module Semian
 
     def acquire(resource = nil, &block)
       return yield if disabled?
+
       transition_to_half_open if transition_to_half_open?
 
       raise OpenCircuitError unless request_allowed?
@@ -63,6 +66,7 @@ module Semian
 
     def mark_success
       return unless half_open?
+
       @successes.increment
       transition_to_close if success_threshold_reached?
     end
@@ -81,7 +85,8 @@ module Semian
 
     def in_use?
       return false if error_timeout_expired?
-      @errors.size > 0
+
+      !@errors.empty?
     end
 
     private
@@ -117,6 +122,7 @@ module Semian
     def error_timeout_expired?
       last_error_time = @errors.last
       return false unless last_error_time
+
       Time.at(last_error_time) + @error_timeout < Time.now
     end
 
@@ -149,7 +155,7 @@ module Semian
     end
 
     def disabled?
-      ENV['SEMIAN_CIRCUIT_BREAKER_DISABLED'] || ENV['SEMIAN_DISABLED']
+      ENV["SEMIAN_CIRCUIT_BREAKER_DISABLED"] || ENV["SEMIAN_DISABLED"]
     end
 
     def maybe_with_half_open_resource_timeout(resource, &block)

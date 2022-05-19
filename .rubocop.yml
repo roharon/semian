@@ -1,5 +1,14 @@
-inherit_from:
-  - http://shopify.github.io/ruby-style-guide/rubocop.yml
+inherit_from: .rubocop_todo.yml
+
+inherit_gem:
+  rubocop-shopify: rubocop.yml
 
 AllCops:
   TargetRubyVersion: '2.6'
+
+Naming/InclusiveLanguage:
+  Enabled: false
+
+Style/GlobalVars:
+  Exclude:
+    - ext/semian/extconf.rb

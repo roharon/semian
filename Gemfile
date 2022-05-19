@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+# frozen_string_literal: true
 
 gem 'benchmark-memory'
 gem 'grpc'
