@@ -520,11 +520,9 @@ class TestResource < Minitest::Test
   def destroy_resources
     return unless @resources
     @resources.each do |resource|
-      begin
-        resource.destroy
-      rescue
-        nil
-      end
+      resource.destroy
+    rescue
+      nil
     end
     @resources = []
   end
@@ -578,11 +576,9 @@ class TestResource < Minitest::Test
   def signal_workers(signal, delete: true)
     return unless @workers
     @workers.each do |worker|
-      begin
-        Process.kill(signal, worker)
-      rescue
-        nil
-      end
+      Process.kill(signal, worker)
+    rescue
+      nil
     end
     @workers = [] if delete
   end

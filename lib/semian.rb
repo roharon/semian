@@ -208,13 +208,11 @@ module Semian
       resource.bulkhead.unregister_worker if resource.bulkhead
       consumers_for_resource = consumers.delete(name) || []
       consumers_for_resource.each do |consumer|
-        begin
-          if consumer.weakref_alive?
-            consumer.clear_semian_resource
-          end
-        rescue WeakRef::RefError
-          next
+        if consumer.weakref_alive?
+          consumer.clear_semian_resource
         end
+      rescue WeakRef::RefError
+        next
       end
     end
   end

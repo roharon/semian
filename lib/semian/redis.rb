@@ -17,7 +17,7 @@ class Redis
   end
 
   class ConnectionError < Redis::BaseConnectionError
-    # A Connection Reset is a fast failure and we don't want to track these errors in 
+    # A Connection Reset is a fast failure and we don't want to track these errors in
     # semian
     def marks_semian_circuits?
       message != "Connection lost (ECONNRESET)"
@@ -90,12 +90,10 @@ module Semian
 
     def connect
       acquire_semian_resource(adapter: :redis, scope: :connection) do
-        begin
-          raw_connect
-        rescue SocketError, RuntimeError => e
-          raise ResolveError.new(semian_identifier) if dns_resolve_failure?(e.cause || e)
-          raise
-        end
+        raw_connect
+      rescue SocketError, RuntimeError => e
+        raise ResolveError.new(semian_identifier) if dns_resolve_failure?(e.cause || e)
+        raise
       end
     end
 
