@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 export CI="true"
 
 echo "Running bundle install"
@@ -27,7 +30,7 @@ echo "MySQL has started!"
 
 echo "Running Tests"
 attempts=0
-while ! bundle exec rake test 2>&1; do
+while ! bundle exec rake test SEED=33111 2>&1; do
   attempts=$((attempts + 1))
   if (( attempts > 2 )); then
     echo "Running Tests failed"
