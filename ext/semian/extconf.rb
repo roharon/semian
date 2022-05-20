@@ -26,7 +26,7 @@ have_func "rb_thread_blocking_region"
 have_func "rb_thread_call_without_gvl"
 
 $CFLAGS = "-D_GNU_SOURCE -Werror -Wall "
-$CFLAGS << if ENV.key?("DEBUG")
+$CFLAGS += if ENV.key?("DEBUG")
   "-O0 -g -DDEBUG"
 else
   "-O3"
