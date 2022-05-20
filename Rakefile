@@ -57,3 +57,8 @@ end
 
 task default: :build
 task default: :test
+
+
+=begin
+bundle exec ruby -Itest test/redis_client_test.rb -n test_timeout_changes_when_half_open_and_configured_with_reads
+=end
