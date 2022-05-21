@@ -26,7 +26,7 @@ jobs:
       #       to the same container
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         ruby:
           # - "3.1" # grpc is causing issues with Ruby 3.1
